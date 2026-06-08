@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>行政车辆管理系统</title>
+<style>
+:root{--fs-blue:#3370ff;--fs-blue-dark:#245bdb;--fs-green:#00b42a;--fs-orange:#ff7d00;--fs-red:#f53f3f;--fs-gray-1:#f2f3f5;--fs-gray-2:#e5e6eb;--fs-gray-3:#c9cdd4;--fs-gray-4:#86909c;--fs-gray-5:#4e5969;--fs-gray-6:#272e3b;--fs-gray-7:#1d2129;--fs-bg:#f2f3f5;--fs-text:#1d2129;--fs-sidebar-w:220px}
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%}body{font-family:"PingFang SC","Microsoft YaHei","Helvetica Neue",Arial,sans-serif;background:var(--fs-bg);color:var(--fs-text)}
+.login-page{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#3370ff,#4c83ff,#7b61ff)}.login-card{background:#fff;border-radius:16px;padding:40px 36px;width:380px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,.12)}.login-card .logo{text-align:center;margin-bottom:24px}.login-card .logo .icon{font-size:48px}.login-card .logo h1{font-size:20px;font-weight:600;margin-top:8px}.login-card .logo .sub{font-size:13px;color:var(--fs-gray-4);margin-top:4px}
+.login-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:8px;font-size:15px;cursor:pointer;font-weight:500;border:none;transition:background .2s}.feishu-btn{background:var(--fs-blue);color:#fff}.feishu-btn:hover{background:var(--fs-blue-dark)}.demo-btn{background:var(--fs-gray-1);color:var(--fs-gray-6);border:1px solid var(--fs-gray-2)}.demo-btn:hover{background:var(--fs-gray-2)}
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--fs-gray-4);font-size:13px}.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--fs-gray-2)}
+.hint{font-size:12px;color:var(--fs-gray-4);text-align:center;margin-top:16px;line-height:1.6}
+.status-box{background:var(--fs-gray-1);border-radius:8px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--fs-gray-5);line-height:1.8}
+.app-layout{display:flex;min-height:100vh}.sidebar{width:var(--fs-sidebar-w);background:var(--fs-gray-7);color:#fff;position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;transition:transform .3s}.sidebar-header{padding:20px 16px 12px;border-bottom:1px solid rgba(255,255,255,.08)}.sidebar-header h1{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}.env-tag{font-size:11px;padding:2px 8px;background:rgba(255,255,255,.15);border-radius:10px}
+.sidebar-user{padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.08)}.avatar{width:32px;height:32px;background:var(--fs-blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}.info{flex:1}.name{font-size:13px;font-weight:500}.role{font-size:11px;color:rgba(255,255,255,.5)}
+.sidebar-nav{padding:8px 0}.nav-group-label{padding:8px 16px 4px;font-size:11px;color:rgba(255,255,255,.35);font-weight:500;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;padding:10px 16px;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s;font-size:13px;margin:0 8px;border-radius:6px}.nav-item:hover{background:rgba(255,255,255,.08);color:#fff}.nav-item.active{background:var(--fs-blue);color:#fff}.nav-icon{width:18px;height:18px;margin-right:10px;display:flex;align-items:center;justify-content:center;font-size:15px}
+.main-content{margin-left:var(--fs-sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column}
+.top-bar{background:#fff;padding:12px 20px;border-bottom:1px solid var(--fs-gray-2);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50}.top-bar h2{font-size:16px;font-weight:600;display:flex;align-items:center;gap:8px}.feishu-badge{display:inline-flex;padding:4px 12px;background:var(--fs-blue);color:#fff;border-radius:16px;font-size:12px}.feishu-badge.offline{background:var(--fs-gray-4)}.top-actions{display:flex;align-items:center;gap:12px}.logout-btn{font-size:13px;color:var(--fs-gray-4);cursor:pointer;padding:4px 8px;border-radius:4px}.logout-btn:hover{color:var(--fs-red)}
+.page-content{padding:20px;flex:1}.page-section{display:none}.page-section.active{display:block}
+.card{background:#fff;border-radius:12px;padding:20px;margin-bottom:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}.card-header h3{font-size:15px;font-weight:600}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.stat-card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.04)}.stat-label{font-size:12px;color:var(--fs-gray-4);margin-bottom:4px}.stat-value{font-size:24px;font-weight:700}.blue{color:var(--fs-blue)}.green{color:var(--fs-green)}.orange{color:var(--fs-orange)}.red{color:var(--fs-red)}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:7px 16px;border-radius:6px;font-size:13px;cursor:pointer;border:1px solid transparent;transition:all .15s;font-weight:500;white-space:nowrap}.btn-primary{background:var(--fs-blue);color:#fff}.btn-primary:hover{background:var(--fs-blue-dark)}.btn-success{background:var(--fs-green);color:#fff}.btn-danger{background:var(--fs-red);color:#fff}.btn-outline{background:#fff;color:var(--fs-gray-6);border-color:var(--fs-gray-3)}.btn-text{background:transparent;color:var(--fs-blue);border:none}.btn-sm{padding:4px 10px;font-size:12px}
+.table-wrap{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}thead th{background:var(--fs-gray-1);padding:10px 12px;text-align:left;font-weight:500;color:var(--fs-gray-5);border-bottom:1px solid var(--fs-gray-2);font-size:12px}tbody td{padding:10px 12px;border-bottom:1px solid var(--fs-gray-1);color:var(--fs-gray-6)}tbody tr:hover{background:var(--fs-gray-1)}tbody td strong{color:var(--fs-text)}
+.status-tag{display:inline-flex;padding:2px 10px;border-radius:4px;font-size:12px;font-weight:500}.st-av{background:#e8ffea;color:#00b42a}.st-use{background:#e8f3ff;color:#3370ff}.st-repair{background:#fff7e8;color:#ff7d00}.st-pend{background:#fff7e8;color:#ff7d00}.st-app1{background:#e8f3ff;color:#3370ff}.st-app2{background:#7b61ff22;color:#7b61ff}.st-app{background:#e8ffea;color:#00b42a}.st-rej{background:#ffece8;color:#f53f3f}.st-disp{background:#e8f3ff;color:#3370ff}.st-comp{background:#f2f3f5;color:#4e5969}
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(29,33,41,.6);z-index:200;display:flex;align-items:center;justify-content:center}.modal-overlay.hidden{display:none}.modal{background:#fff;border-radius:12px;padding:0;width:520px;max-width:90vw;max-height:85vh;overflow-y:auto;box-shadow:0 12px 32px rgba(0,0,0,.16)}.modal-header{padding:20px 24px 0}.modal-header h3{font-size:16px;font-weight:600}.modal-body{padding:20px 24px}.modal-footer{display:flex;justify-content:flex-end;gap:12px;padding:16px 24px;border-top:1px solid var(--fs-gray-2)}
+.form-group{margin-bottom:14px}.form-group label{display:block;font-size:13px;font-weight:500;color:var(--fs-gray-6);margin-bottom:6px}.req{color:var(--fs-red)}.form-control{width:100%;padding:8px 12px;border:1px solid var(--fs-gray-3);border-radius:6px;font-size:13px;color:var(--fs-text);background:#fff}.form-control:focus{outline:none;border-color:var(--fs-blue);box-shadow:0 0 0 2px rgba(51,112,255,.15)}select.form-control{appearance:auto}textarea.form-control{resize:vertical;min-height:72px}.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}.form-hint{font-size:11px;color:var(--fs-gray-4);margin-top:4px}
+.search-bar{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}.search-bar .form-control{width:auto;min-width:160px}
+.toast-container{position:fixed;top:16px;right:16px;z-index:300}.toast{background:#fff;border-radius:8px;padding:12px 16px;margin-bottom:8px;box-shadow:0 4px 16px rgba(0,0,0,.12);font-size:13px;animation:toastIn .25s;max-width:320px}.toast-success{border-left:3px solid var(--fs-green)}.toast-error{border-left:3px solid var(--fs-red)}.toast-info{border-left:3px solid var(--fs-blue)}.toast-warn{border-left:3px solid var(--fs-orange)}@keyframes toastIn{from{transform:translateY(-8px);opacity:0}to{transform:translateY(0);opacity:1}}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.detail-item{padding:6px 0}.dl{font-size:12px;color:var(--fs-gray-4);margin-bottom:2px}.dv{font-size:14px;font-weight:500;color:var(--fs-text)}
+.perm-tip{background:#fff7e8;border-radius:8px;padding:12px 16px;font-size:13px;color:var(--fs-orange);margin-bottom:16px}
+.perm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.perm-item{display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:6px;font-size:12px;cursor:pointer;border:1px solid var(--fs-gray-2);transition:all .15s}.perm-item:hover{border-color:var(--fs-blue)}.perm-item.selected{background:var(--fs-blue);color:#fff;border-color:var(--fs-blue)}.perm-ck{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--fs-gray-3);display:flex;align-items:center;justify-content:center;font-size:10px}
+.flow-visual{display:flex;align-items:center;gap:0;margin-bottom:16px;flex-wrap:wrap}.flow-step{background:var(--fs-blue);color:#fff;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;min-width:100px;text-align:center}.flow-step.last{background:var(--fs-green)}.flow-arrow{font-size:18px;color:var(--fs-gray-3);margin:0 6px}
+@media(max-width:768px){.sidebar{transform:translateX(-100%)}.sidebar.open{transform:translateX(0)}.main-content{margin-left:0}.stats-row{grid-template-columns:repeat(2,1fr)}.form-row,.detail-grid{grid-template-columns:1fr}.perm-grid{grid-template-columns:repeat(2,1fr)}.mobile-toggle{display:flex}.page-content{padding:12px}.flow-visual{flex-direction:column;align-items:flex-start}.flow-arrow{transform:rotate(90deg)}}.mobile-toggle{display:none;background:transparent;border:none;cursor:pointer;font-size:18px;color:var(--fs-gray-6);padding:4px}
+</style>
+</head>
+<body>
+<div class="toast-container" id="TC"></div>
+<div class="modal-overlay hidden" id="MO" onclick="if(event.target===this)closeModal()"><div class="modal" id="MC"></div></div>
+
+<div class="login-page" id="loginPage">
+  <div class="login-card">
+    <div class="logo"><div class="icon">🚗</div><h1>行政车辆管理系统</h1><div class="sub">飞书工作台 · 企业车辆综合管理</div></div>
+    <div class="status-box" id="loginStatus">正在检测登录环境...</div>
+    <button class="login-btn feishu-btn" id="feishuBtn" style="display:none" onclick="startOAuth()">飞书账号登录</button>
+    <div class="divider" id="divider" style="display:none">或</div>
+    <button class="login-btn demo-btn" id="demoBtn" style="display:none" onclick="demoLogin()">演示模式登录</button>
+    <div class="hint">飞书登录获取真实姓名和部门信息</div>
+  </div>
+</div>
+
+<div class="app-layout" id="appLayout" style="display:none">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header"><h1>🚗 车辆管理 <span class="env-tag" id="envTag">飞书</span></h1></div>
+    <div class="sidebar-user">
+      <div class="avatar" id="userAvatar">张</div>
+      <div class="info"><div class="name" id="userName">用户</div><div class="role" id="userRole">管理员</div></div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group-label">概览</div><div class="nav-item active" data-page="dashboard"><span class="nav-icon">📊</span>数据概览</div>
+      <div class="nav-group-label">车辆管理</div><div class="nav-item" data-page="vehicles"><span class="nav-icon">🚙</span>车辆档案</div><div class="nav-item" data-page="maintenance"><span class="nav-icon">🔧</span>车辆维修</div>
+      <div class="nav-group-label">用车流程</div><div class="nav-item" data-page="application"><span class="nav-icon">📝</span>用车申请</div><div class="nav-item" data-page="approval"><span class="nav-icon">✅</span>用车审批</div><div class="nav-item" data-page="dispatch"><span class="nav-icon">🚀</span>车辆调派</div>
+      <div class="nav-group-label">系统设置</div><div class="nav-item" data-page="roles" id="navRoles"><span class="nav-icon">👑</span>角色管理</div><div class="nav-item" data-page="users" id="navUsers"><span class="nav-icon">👥</span>用户管理</div><div class="nav-item" data-page="flowConfig" id="navFlow"><span class="nav-icon">⚙️</span>审批流程配置</div>
+    </nav>
+  </aside>
+  <div class="main-content">
+    <div class="top-bar">
+      <div style="display:flex;align-items:center;gap:8px"><button class="mobile-toggle" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button><h2 id="pageTitle">数据概览</h2><span class="feishu-badge" id="fBadge">飞书</span></div>
+      <div class="top-actions"><span style="font-size:13px;color:var(--fs-gray-4)" id="topUser">用户</span><span class="logout-btn" onclick="logout()">退出</span></div>
+    </div>
+    <div class="page-content">
+      <div class="page-section active" id="page-dashboard">
+        <div class="stats-row"><div class="stat-card"><div class="stat-label">车辆总数</div><div class="stat-value blue" id="s1">0</div></div><div class="stat-card"><div class="stat-label">可用车辆</div><div class="stat-value green" id="s2">0</div></div><div class="stat-card"><div class="stat-label">待审批</div><div class="stat-value orange" id="s3">0</div></div><div class="stat-card"><div class="stat-label">维修中</div><div class="stat-value red" id="s4">0</div></div></div>
+        <div class="card"><div class="card-header"><h3>审批流程概览</h3></div><div class="flow-visual" id="dashFlow"></div></div>
+        <div class="card"><div class="card-header"><h3>最新用车申请</h3></div><div class="table-wrap"><table><thead><tr><th>申请人</th><th>事由</th><th>当前步骤</th><th>状态</th></tr></thead><tbody id="tb1"></tbody></table></div></div>
+      </div>
+      <div class="page-section" id="page-vehicles"><div class="perm-tip" id="vp">仅管理员/行政部审批人可增删车辆</div><div class="search-bar"><input class="form-control" placeholder="搜索..." id="vs" oninput="rV()"><select class="form-control" id="vf" onchange="rV()"><option value="">全部</option><option value="可用">可用</option><option value="使用中">使用中</option><option value="维修中">维修中</option></select><button class="btn btn-primary" id="avb" onclick="sVM()">+ 新增</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>车牌号</th><th>品牌</th><th>类型</th><th>座位</th><th>里程</th><th>驾驶员</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb2"></tbody></table></div></div></div>
+      <div class="page-section" id="page-maintenance"><div class="search-bar"><input class="form-control" placeholder="搜索..." id="ms" oninput="rM()"><select class="form-control" id="mf" onchange="rM()"><option value="">全部</option><option value="维修中">维修中</option><option value="已完成">已完成</option></select><button class="btn btn-primary" onclick="sMM()">+ 新增</button></div><div class="card"><div class="table-wrap"><table><thead><tr><th>车牌号</th><th>项目</th><th>厂家</th><th>日期</th><th>费用</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb3"></tbody></table></div></div></div>
+      <div class="page-section" id="page-application"><div class="search-bar"><input class="form-control" placeholder="搜索..." id="as" oninput="rA()"><select class="form-control" id="af" onchange="rA()"><option value="">全部</option><option value="待部门审批">待部门审批</option><option value="待行政审批">待行政审批</option><option value="已批准">已批准</option><option value="已驳回">已驳回</option><option value="已调派">已调派</option><option value="已完成">已完成</option></select><button class="btn btn-primary" onclick="sAM()">+ 新增</button></div><div class="card"><div class="card-header"><h3>审批流程</h3></div><div class="flow-visual" id="appFlowVis"></div></div><div class="card"><div class="table-wrap"><table><thead><tr><th>编号</th><th>申请人</th><th>部门</th><th>事由</th><th>当前步骤</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb4"></tbody></table></div></div></div>
+      <div class="page-section" id="page-approval"><div class="perm-tip" id="ap">只有对应审批角色的成员可审批</div><div class="card"><div class="card-header"><h3>审批流程</h3></div><div class="flow-visual" id="apFlowVis"></div></div><div class="search-bar"><select class="form-control" id="apf" onchange="rAp()"><option value="my">待我审批</option><option value="">全部</option><option value="待部门审批">待部门审批</option><option value="待行政审批">待行政审批</option></select></div><div class="card"><div class="card-header"><h3>待审批列表</h3></div><div class="table-wrap"><table><thead><tr><th>编号</th><th>申请人</th><th>部门</th><th>事由</th><th>当前步骤</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb5"></tbody></table></div></div></div>
+      <div class="page-section" id="page-dispatch"><div class="perm-tip" id="dp">仅行政部审批人/管理员可调派</div><div class="stats-row"><div class="stat-card"><div class="stat-label">待调派</div><div class="stat-value orange" id="d1">0</div></div><div class="stat-card"><div class="stat-label">可用车辆</div><div class="stat-value green" id="d2">0</div></div><div class="stat-card"><div class="stat-label">进行中</div><div class="stat-value blue" id="d3">0</div></div><div class="stat-card"><div class="stat-label">已完成</div><div class="stat-value" style="color:var(--fs-gray-5)" id="d4">0</div></div></div><div class="card"><div class="card-header"><h3>待调派</h3></div><div class="table-wrap"><table><thead><tr><th>编号</th><th>申请人</th><th>事由</th><th>时间</th><th>人数</th><th>操作</th></tr></thead><tbody id="tb6"></tbody></table></div></div><div class="card"><div class="card-header"><h3>调派记录</h3></div><div class="table-wrap"><table><thead><tr><th>编号</th><th>申请人</th><th>车牌号</th><th>驾驶员</th><th>时间</th><th>状态</th><th>操作</th></tr></thead><tbody id="tb7"></tbody></table></div></div></div>
+      <div class="page-section" id="page-roles"><div class="card"><div class="card-header"><h3>角色列表</h3><button class="btn btn-primary" onclick="sRM()">+ 新增角色</button></div><div class="table-wrap"><table><thead><tr><th>角色名称</th><th>编码</th><th>描述</th><th>权限</th><th>操作</th></tr></thead><tbody id="tb_roles"></tbody></table></div></div></div>
+      <div class="page-section" id="page-users"><div class="card"><div class="card-header"><h3>用户列表</h3><div class="form-hint">用户通过飞书登录后自动进入列表，管理员可变更角色</div></div><div class="table-wrap"><table><thead><tr><th>姓名</th><th>部门</th><th>手机</th><th>当前角色</th><th>操作</th></tr></thead><tbody id="tb_users"></tbody></table></div></div></div>
+      <div class="page-section" id="page-flowConfig"><div class="card"><div class="card-header"><h3>当前审批流程</h3><button class="btn btn-primary" onclick="sAFS()">+ 新增步骤</button></div><div id="flowConfigVis"></div></div><div class="card"><div class="card-header"><h3>步骤详情</h3></div><div class="table-wrap"><table><thead><tr><th>步骤</th><th>名称</th><th>审批角色</th><th>描述</th><th>操作</th></tr></thead><tbody id="tb_flow"></tbody></table></div></div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ========== 配置 ==========
+var FS_APP_ID='cli_aaabfe578c799ccb';
+var REDIRECT_URI='https://serene-kulfi-3f047c.netlify.app/';
+var API_BASE='https://serene-kulfi-3f047c.netlify.app';
+var DB={v:'vm_v',m:'vm_m',a:'vm_a',d:'vm_d'};
+var curUser=null,inFS=false;
+
+var DEMO_ROLES=[{id:'R001',name:'系统管理员',code:'admin',desc:'拥有全部权限',permissions:['all']},{id:'R002',name:'部门负责人',code:'dept_head',desc:'审批本部门用车申请',permissions:['approve_dept']},{id:'R003',name:'行政部审批人',code:'admin_approver',desc:'行政部审批+派车',permissions:['approve_admin','dispatch']},{id:'R004',name:'普通成员',code:'member',desc:'提交用车申请',permissions:['apply']},{id:'R005',name:'驾驶员',code:'driver',desc:'查看派车任务',permissions:['view_dispatch']}];
+var DEMO_FLOW=[{step:1,name:'部门负责人审批',role_code:'dept_head',desc:'部门负责人审核本部门用车申请'},{step:2,name:'行政部审批',role_code:'admin_approver',desc:'行政部终审并安排派车'}];
+var ALL_PERMS=[{code:'all',label:'全部权限'},{code:'apply',label:'申请用车'},{code:'approve_dept',label:'部门审批'},{code:'approve_admin',label:'行政审批'},{code:'dispatch',label:'派车调派'},{code:'view_dispatch',label:'查看派车'},{code:'manage_vehicle',label:'管理车辆'},{code:'manage_role',label:'管理角色'}];
+var gRoles=DEMO_ROLES,gFlow=DEMO_FLOW,gUsers=[];
+
+// ========== 飞书登录 ==========
+function checkEnv(){
+  var p=new URLSearchParams(location.search);
+  var code=p.get('code');
+  var sb=document.getElementById('loginStatus');
+  inFS=/Lark|Feishu/i.test(navigator.userAgent);
+  if(code){
+    sb.innerHTML='飞书授权成功！正在获取用户信息...';
+    history.replaceState({},document.title,location.pathname);
+    fetchUserInfo(code);
+    return;
+  }
+  sb.innerHTML='环境检测：飞书客户端='+ (inFS?'是':'否') + '<br>点击下方按钮登录';
+  document.getElementById('feishuBtn').style.display='';
+  document.getElementById('divider').style.display='';
+  document.getElementById('demoBtn').style.display='';
+}
+
+function fetchUserInfo(code){
+  var url=API_BASE+'/api/login?code='+encodeURIComponent(code);
+  fetch(url).then(function(resp){return resp.json()}).then(function(data){
+    if(data.success&&data.user){
+      var u=data.user;
+      curUser={name:u.name,dept:u.dept_name||'未指定部门',role_code:u.role_code||'member',role_name:u.role_name||'普通成员',permissions:u.permissions||['apply'],openId:u.open_id,avatarUrl:u.avatar_url,is_admin:u.is_admin};
+      inFS=true;
+      loadBackendData();
+      toast('飞书登录成功：'+u.name,'success');
+      enterApp();
+    }else{
+      document.getElementById('loginStatus').innerHTML='获取用户信息失败：'+(data.error||'未知错误');
+      toast('获取用户信息失败','warn');
+    }
+  }).catch(function(e){
+    document.getElementById('loginStatus').innerHTML='后端服务未连接，请部署后端或选择演示角色';
+    toast('后端不可达','warn');
+    demoLogin();
+  });
+}
+
+function loadBackendData(){
+  Promise.all([
+    fetch(API_BASE+'/api/roles').then(function(r){return r.json()}),
+    fetch(API_BASE+'/api/approval-flow').then(function(r){return r.json()}),
+    fetch(API_BASE+'/api/users').then(function(r){return r.json()})
+  ]).then(function(res){
+    if(res[0].success)gRoles=res[0].roles;
+    if(res[1].success)gFlow=res[1].flow;
+    if(res[2].success)gUsers=res[2].users;
+  }).catch(function(){});
+}
+
+function startOAuth(){
+  location.href='https://open.feishu.cn/open-apis/authen/v1/index?redirect_uri='+encodeURIComponent(REDIRECT_URI)+'&app_id='+FS_APP_ID+'&state=vm';
+}
+
+function demoLogin(){
+  showModal('<div class="modal-header"><h3>选择角色</h3></div><div class="modal-body"><div style="display:flex;flex-direction:column;gap:10px"><button class="btn btn-primary" style="justify-content:center;padding:12px" onclick="setR(\'admin\')">👑 系统管理员</button><button class="btn btn-outline" style="justify-content:center;padding:12px" onclick="setR(\'dept_head\')">👔 部门负责人</button><button class="btn btn-outline" style="justify-content:center;padding:12px" onclick="setR(\'admin_approver\')">📋 行政部审批人</button><button class="btn btn-outline" style="justify-content:center;padding:12px" onclick="setR(\'member\')">👤 普通成员</button><button class="btn btn-outline" style="justify-content:center;padding:12px" onclick="setR(\'driver\')">🚗 驾驶员</button></div></div>');
+}
+
+function setR(r){
+  var m={admin:{name:'张主任',dept:'行政部',role_code:'admin',role_name:'系统管理员',permissions:['all']},dept_head:{name:'刘部长',dept:'市场部',role_code:'dept_head',role_name:'部门负责人',permissions:['approve_dept']},admin_approver:{name:'李主管',dept:'行政部',role_code:'admin_approver',role_name:'行政部审批人',permissions:['approve_admin','dispatch']},member:{name:'王科员',dept:'财务部',role_code:'member',role_name:'普通成员',permissions:['apply']},driver:{name:'赵师傅',dept:'车队',role_code:'driver',role_name:'驾驶员',permissions:['view_dispatch']}};
+  curUser=m[r];closeModal();enterApp();
+}
+
+function enterApp(){
+  document.getElementById('loginPage').style.display='none';
+  document.getElementById('appLayout').style.display='flex';
+  var av=document.getElementById('userAvatar');
+  if(curUser.avatarUrl){av.innerHTML='<img src="'+curUser.avatarUrl+'" alt="'+curUser.name+'">'}
+  else{av.textContent=curUser.name[0]}
+  document.getElementById('userName').textContent=curUser.name;
+  document.getElementById('userRole').textContent=curUser.role_name||curUser.role_code;
+  document.getElementById('topUser').textContent=curUser.name;
+  document.getElementById('envTag').textContent=inFS?'飞书':'演示';
+  document.getElementById('fBadge').textContent=inFS?'飞书':'演示';
+  document.getElementById('fBadge').className=inFS?'feishu-badge':'feishu-badge offline';
+  var isAdm=curUser.permissions&&curUser.permissions.indexOf('all')>=0;
+  document.getElementById('navRoles').style.display=isAdm?'':'none';
+  document.getElementById('navUsers').style.display=isAdm?'':'none';
+  document.getElementById('navFlow').style.display=isAdm?'':'none';
+  upPerm();initD();nav('dashboard');
+}
+
+function upPerm(){
+  var p=curUser.permissions||[];
+  var isAdm=p.indexOf('all')>=0;
+  document.getElementById('avb').style.display=(isAdm||p.indexOf('manage_vehicle')>=0)?'':'none';
+  document.getElementById('vp').style.display=(isAdm||p.indexOf('manage_vehicle')>=0)?'none':'';
+  document.getElementById('dp').style.display=(isAdm||p.indexOf('dispatch')>=0)?'none':'';
+}
+function logout(){curUser=null;document.getElementById('appLayout').style.display='none';document.getElementById('loginPage').style.display='flex';checkEnv()}
+
+// ========== 数据 ==========
+function ld(k){try{return JSON.parse(localStorage.getItem(k)||'[]')}catch(e){return[]}}
+function sd(k,d){localStorage.setItem(k,JSON.stringify(d))}
+function initD(){
+  if(ld(DB.v).length)return;
+  sd(DB.v,[{id:'V001',pn:'京A·88888',br:'奔驰',md:'E300L',ty:'轿车',cl:'黑色',pd:'2022-03-15',ml:45000,st:'可用',dr:'李师傅',sc:5},{id:'V002',pn:'京A·66666',br:'丰田',md:'凯美瑞',ty:'轿车',cl:'白色',pd:'2021-08-20',ml:62000,st:'可用',dr:'王师傅',sc:5},{id:'V003',pn:'京B·12345',br:'别克',md:'GL8',ty:'商务车',cl:'银色',pd:'2023-01-10',ml:28000,st:'可用',dr:'赵师傅',sc:7},{id:'V004',pn:'京B·77777',br:'大众',md:'帕萨特',ty:'轿车',cl:'黑色',pd:'2020-06-15',ml:85000,st:'使用中',dr:'孙师傅',sc:5},{id:'V005',pn:'京C·55555',br:'金杯',md:'海狮',ty:'商务车',cl:'白色',pd:'2019-11-01',ml:120000,st:'维修中',dr:'周师傅',sc:9},{id:'V006',pn:'京D·99999',br:'奥迪',md:'A6L',ty:'轿车',cl:'黑色',pd:'2023-06-20',ml:15000,st:'可用',dr:'钱师傅',sc:5}]);
+  sd(DB.m,[{id:'M001',vid:'V005',pn:'京C·55555',pj:'发动机维修',ws:'汽修厂',sd:'2026-05-28',ed:'2026-06-05',ae:'',co:3500,st:'维修中'},{id:'M002',vid:'V004',pn:'京B·77777',pj:'轮胎更换',ws:'4S店',sd:'2026-04-10',ed:'2026-04-12',ae:'2026-04-11',co:2800,st:'已完成'}]);
+  sd(DB.a,[{id:'A001',ap:'刘部长',dp:'市场部',rs:'客户拜访',st:'2026-06-05 09:00',et:'2026-06-05 17:00',ds:'朝阳区CBD',ps:3,status:'待行政审批',vt:'轿车',currentStep:2,approvalLog:[{step:1,action:'approved',by:'刘部长',time:'2026-06-05 08:30',comment:'同意'}]},{id:'A002',ap:'王科员',dp:'财务部',rs:'银行业务',st:'2026-06-06 10:00',et:'2026-06-06 14:00',ds:'西城区金融街',ps:2,status:'待部门审批',vt:'轿车',currentStep:1,approvalLog:[]},{id:'A003',ap:'赵主任',dp:'人力资源部',rs:'外出培训',st:'2026-06-07 08:00',et:'2026-06-07 18:00',ds:'海淀区学院路',ps:8,status:'待部门审批',vt:'商务车',currentStep:1,approvalLog:[]},{id:'A004',ap:'陈经理',dp:'行政部',rs:'商务接待',st:'2026-06-04 14:00',et:'2026-06-04 16:00',ds:'望京SOHO',ps:5,status:'已调派',vt:'商务车',currentStep:3,approvalLog:[{step:1,action:'approved',by:'陈经理',time:'2026-06-04 09:00',comment:'同意'}],di:'D001'}]);
+  sd(DB.d,[{id:'D001',ai:'A004',ap:'陈经理',vid:'V003',pn:'京B·12345',dr:'赵师傅',status:'进行中'}]);
+}
+
+function gid(p){return p+Date.now().toString(36).toUpperCase()}
+function toast(m,t){if(!t)t='success';var c=document.getElementById('TC'),e=document.createElement('div');e.className='toast toast-'+t;e.textContent=m;c.appendChild(e);setTimeout(function(){e.remove()},3000)}
+function showModal(h){document.getElementById('MC').innerHTML=h;document.getElementById('MO').classList.remove('hidden')}
+function closeModal(){document.getElementById('MO').classList.add('hidden')}
+function st2(s){var m={'可用':'st-av','使用中':'st-use','维修中':'st-repair','待部门审批':'st-app1','待行政审批':'st-app2','已批准':'st-app','已驳回':'st-rej','已调派':'st-disp','进行中':'st-disp','已完成':'st-comp'};return '<span class="status-tag '+ (m[s]||'') +'">'+s+'</span>'}
+function canApproveStep(rc){return curUser.permissions&&curUser.permissions.indexOf('all')>=0||curUser.role_code===rc}
+function getRoleName(code){var r=gRoles.find(function(x){return x.code===code});return r?r.name:code}
+function getPermLabels(perms){return perms.map(function(p){var pm=ALL_PERMS.find(function(x){return x.code===p});return pm?pm.label:p}).join('、')}
+
+var TL={dashboard:'数据概览',vehicles:'车辆档案',maintenance:'车辆维修',application:'用车申请',approval:'用车审批',dispatch:'车辆调派',roles:'角色管理',users:'用户管理',flowConfig:'审批流程配置'};
+function nav(p){
+  document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active')});
+  var el=document.querySelector('.nav-item[data-page="'+p+'"]');if(el)el.classList.add('active');
+  document.querySelectorAll('.page-section').forEach(function(s){s.classList.remove('active')});
+  document.getElementById('page-'+p).classList.add('active');
+  document.getElementById('pageTitle').textContent=TL[p];
+  var fn={dashboard:rDash,vehicles:rV,maintenance:rM,application:rA,approval:rAp,dispatch:rDis,roles:rRoles,users:rUsers,flowConfig:rFC};if(fn[p])fn[p]();
+  document.getElementById('sidebar').classList.remove('open');
+}
+document.querySelectorAll('.nav-item').forEach(function(i){i.addEventListener('click',function(){nav(i.dataset.page)})});
+
+function renderFlowVis(cid){
+  var c=document.getElementById(cid);if(!gFlow.length){c.innerHTML='<span style="color:var(--fs-gray-4)">未配置</span>';return}
+  var h='';gFlow.forEach(function(f,i){h+='<div class="flow-step'+(i===gFlow.length-1?' last':'')+'">第'+f.step+'步: '+f.name+'<br><small>'+getRoleName(f.role_code)+'</small></div>';if(i<gFlow.length-1)h+='<div class="flow-arrow">→</div>'});
+  h+='<div class="flow-step last" style="background:var(--fs-green)">完成派车</div>';c.innerHTML=h;
+}
+
+// ========== 数据概览 ==========
+function rDash(){
+  var v=ld(DB.v),a=ld(DB.a);
+  document.getElementById('s1').textContent=v.length;
+  document.getElementById('s2').textContent=v.filter(function(x){return x.st==='可用'}).length;
+  document.getElementById('s3').textContent=a.filter(function(x){return x.status==='待部门审批'||x.status==='待行政审批'}).length;
+  document.getElementById('s4').textContent=v.filter(function(x){return x.st==='维修中'}).length;
+  renderFlowVis('dashFlow');
+  var r=a.slice(-5).reverse(),t=document.getElementById('tb1');
+  t.innerHTML=r.map(function(x){var sl=gFlow.find(function(f){return f.step===x.currentStep});return '<tr><td><strong>'+x.ap+'</strong></td><td>'+x.rs+'</td><td>'+ (sl?sl.name:x.status) +'</td><td>'+st2(x.status)+'</td></tr>'}).join('');
+  if(!r.length)t.innerHTML='<tr><td colspan="4" style="text-align:center;color:var(--fs-gray-4)">暂无</td></tr>';
+}
+
+// ========== 车辆档案 ==========
+function rV(){
+  var v=ld(DB.v),s=(document.getElementById('vs').value||'').toLowerCase(),f=document.getElementById('vf').value;
+  var fl=v.filter(function(x){return(!s||x.pn.toLowerCase().indexOf(s)>=0||x.br.toLowerCase().indexOf(s)>=0)&&(!f||x.st===f)});
+  var ce=curUser.permissions.indexOf('all')>=0||curUser.permissions.indexOf('manage_vehicle')>=0;
+  document.getElementById('tb2').innerHTML=fl.map(function(x){var ops=ce?'<button class="btn btn-text btn-sm" onclick="eV(\''+x.id+'\')">编辑</button><button class="btn btn-text btn-sm" style="color:var(--fs-red)" onclick="dV(\''+x.id+'\')">删除</button>':'<button class="btn btn-text btn-sm" onclick="viV(\''+x.id+'\')">查看</button>';return '<tr><td><strong>'+x.pn+'</strong></td><td>'+x.br+' '+x.md+'</td><td>'+x.ty+'</td><td>'+x.sc+'座</td><td>'+x.ml+'</td><td>'+x.dr+'</td><td>'+st2(x.st)+'</td><td>'+ops+'</td></tr>'}).join('');
+  if(!fl.length)document.getElementById('tb2').innerHTML='<tr><td colspan="8" style="text-align:center;color:var(--fs-gray-4)">暂无</td></tr>';
+}
+function sVM(d){var e=d?true:false,v=d||{};showModal('<div class="modal-header"><h3>'+ (e?'编辑':'新增') +'车辆</h3></div><div class="modal-body"><div class="form-row"><div class="form-group"><label>车牌号<span class="req">*</span></label><input class="form-control" id="f_pn" value="'+(v.pn||'')+'"></div><div class="form-group"><label>品牌<span class="req">*</span></label><input class="form-control" id="f_br" value="'+(v.br||'')+'"></div></div><div class="form-row"><div class="form-group"><label>型号</label><input class="form-control" id="f_md" value="'+(v.md||'')+'"></div><div class="form-group"><label>类型</label><select class="form-control" id="f_ty"><option value="轿车">轿车</option><option value="商务车">商务车</option><option value="越野车">越野车</option></select></div></div><div class="form-row"><div class="form-group"><label>座位数</label><input class="form-control" type="number" id="f_sc" value="'+(v.sc||5)+'"></div><div class="form-group"><label>驾驶员</label><input class="form-control" id="f_dr" value="'+(v.dr||'')+'"></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="svV(\''+ (e?v.id:'') +'\')">保存</button></div>')}
+function svV(eid){var pn=document.getElementById('f_pn').value.trim(),br=document.getElementById('f_br').value.trim();if(!pn||!br){toast('必填','error');return}var o={id:eid||gid('V'),pn:pn,br:br,md:document.getElementById('f_md').value.trim(),ty:document.getElementById('f_ty').value,sc:+document.getElementById('f_sc').value||5,dr:document.getElementById('f_dr').value.trim(),st:'可用',ml:0};var a=ld(DB.v);if(eid){var i=a.findIndex(function(x){return x.id===eid});if(i>=0)Object.assign(a[i],o)}else a.push(o);sd(DB.v,a);closeModal();rV();toast(eid?'已更新':'已新增')}
+function eV(id){var v=ld(DB.v).find(function(x){return x.id===id});if(v)sVM(v)}
+function viV(id){var v=ld(DB.v).find(function(x){return x.id===id});showModal('<div class="modal-header"><h3>'+v.pn+'</h3></div><div class="modal-body"><div class="detail-grid"><div class="detail-item"><div class="dl">品牌型号</div><div class="dv">'+v.br+' '+v.md+'</div></div><div class="detail-item"><div class="dl">类型/座位</div><div class="dv">'+v.ty+'/'+v.sc+'座</div></div><div class="detail-item"><div class="dl">驾驶员</div><div class="dv">'+v.dr+'</div></div><div class="detail-item"><div class="dl">状态</div><div class="dv">'+st2(v.st)+'</div></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>')}
+function dV(id){var v=ld(DB.v).find(function(x){return x.id===id});showModal('<div class="modal-header"><h3>确认删除</h3></div><div class="modal-body"><p>删除'+ (v?v.pn:'') +'？</p></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-danger" onclick="doDV(\''+id+'\')">确认</button></div>')}
+function doDV(id){sd(DB.v,ld(DB.v).filter(function(x){return x.id!==id}));closeModal();rV();toast('已删除')}
+
+// ========== 车辆维修 ==========
+function rM(){var m=ld(DB.m),s=(document.getElementById('ms').value||'').toLowerCase(),f=document.getElementById('mf').value;var fl=m.filter(function(x){return(!s||x.pn.toLowerCase().indexOf(s)>=0||x.pj.toLowerCase().indexOf(s)>=0)&&(!f||x.st===f)});document.getElementById('tb3').innerHTML=fl.map(function(x){return '<tr><td><strong>'+x.pn+'</strong></td><td>'+x.pj+'</td><td>'+x.ws+'</td><td>'+x.sd+'</td><td>'+x.co+'</td><td>'+st2(x.st)+'</td><td>'+ (x.st==='维修中'?'<button class="btn btn-text btn-sm" onclick="cM(\''+x.id+'\')">完工</button>':'') +'<button class="btn btn-text btn-sm" onclick="viM(\''+x.id+'\')">查看</button></td></tr>'}).join('');if(!fl.length)document.getElementById('tb3').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--fs-gray-4)">暂无</td></tr>'}
+function sMM(){var vs=ld(DB.v);var opts=vs.map(function(v){return '<option value="'+v.id+'" data-p="'+v.pn+'">'+v.pn+'-'+v.br+v.md+'</option>'}).join('');showModal('<div class="modal-header"><h3>新增维修</h3></div><div class="modal-body"><div class="form-group"><label>车辆</label><select class="form-control" id="f_mv"><option value="">请选择</option>'+opts+'</select></div><div class="form-group"><label>项目</label><input class="form-control" id="f_mp"></div><div class="form-row"><div class="form-group"><label>厂家</label><input class="form-control" id="f_mw"></div><div class="form-group"><label>费用</label><input class="form-control" type="number" id="f_mc" value="0"></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="svM()">保存</button></div>')}
+function svM(){var vid=document.getElementById('f_mv').value,pj=document.getElementById('f_mp').value.trim();if(!vid||!pj){toast('必填','error');return}var pn=document.getElementById('f_mv').options[document.getElementById('f_mv').selectedIndex].dataset.p;var o={id:gid('M'),vid:vid,pn:pn,pj:pj,ws:document.getElementById('f_mw').value.trim(),co:+document.getElementById('f_mc').value||0,sd:'',ed:'',ae:'',st:'维修中'};var ms=ld(DB.m);ms.push(o);sd(DB.m,ms);var vs=ld(DB.v),vi=vs.findIndex(function(x){return x.id===vid});if(vi>=0)vs[vi].st='维修中';sd(DB.v,vs);closeModal();rM();toast('已添加')}
+function cM(id){showModal('<div class="modal-header"><h3>完工确认</h3></div><div class="modal-body"><p>确认完工？</p></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-success" onclick="doCM(\''+id+'\')">确认</button></div>')}
+function doCM(id){var a=ld(DB.m),i=a.findIndex(function(x){return x.id===id});a[i].st='已完成';sd(DB.m,a);var vs=ld(DB.v),vi=vs.findIndex(function(x){return x.id===a[i].vid});if(vi>=0)vs[vi].st='可用';sd(DB.v,vs);closeModal();rM();toast('已完工')}
+function viM(id){var m=ld(DB.m).find(function(x){return x.id===id});showModal('<div class="modal-header"><h3>维修详情</h3></div><div class="modal-body"><div class="detail-grid"><div class="detail-item"><div class="dl">车牌</div><div class="dv">'+m.pn+'</div></div><div class="detail-item"><div class="dl">项目</div><div class="dv">'+m.pj+'</div></div><div class="detail-item"><div class="dl">费用</div><div class="dv">'+m.co+'元</div></div><div class="detail-item"><div class="dl">状态</div><div class="dv">'+st2(m.st)+'</div></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>')}
+
+// ========== 用车申请（多层审批） ==========
+function rA(){var a=ld(DB.a),s=(document.getElementById('as').value||'').toLowerCase(),f=document.getElementById('af').value;var fl=a.filter(function(x){return(!s||x.ap.toLowerCase().indexOf(s)>=0||x.rs.toLowerCase().indexOf(s)>=0)&&(!f||x.status===f)});renderFlowVis('appFlowVis');document.getElementById('tb4').innerHTML=fl.map(function(x){var sl=gFlow.find(function(f){return f.step===x.currentStep});return '<tr><td><strong>'+x.id+'</strong></td><td>'+x.ap+'</td><td>'+x.dp+'</td><td>'+x.rs+'</td><td>'+ (sl?sl.name:x.status) +'</td><td>'+st2(x.status)+'</td><td><button class="btn btn-text btn-sm" onclick="viA(\''+x.id+'\')">查看</button></td></tr>'}).join('');if(!fl.length)document.getElementById('tb4').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--fs-gray-4)">暂无</td></tr>'}
+function sAM(){showModal('<div class="modal-header"><h3>新增用车申请</h3></div><div class="modal-body"><div class="form-row"><div class="form-group"><label>申请人</label><input class="form-control" id="f_aa" value="'+curUser.name+'" readonly><div class="form-hint">从飞书账号自动获取</div></div><div class="form-group"><label>部门</label><input class="form-control" id="f_ad" value="'+ (curUser.dept||'') +'" readonly></div></div><div class="form-row"><div class="form-group"><label>事由<span class="req">*</span></label><input class="form-control" id="f_ar"></div><div class="form-group"><label>车型</label><select class="form-control" id="f_vt"><option value="轿车">轿车</option><option value="商务车">商务车</option><option value="越野车">越野车</option></select></div></div><div class="form-row"><div class="form-group"><label>用车时间<span class="req">*</span></label><input class="form-control" type="datetime-local" id="f_ast"></div><div class="form-group"><label>返回时间<span class="req">*</span></label><input class="form-control" type="datetime-local" id="f_aet"></div></div><div class="form-row"><div class="form-group"><label>目的地<span class="req">*</span></label><input class="form-control" id="f_ads"></div><div class="form-group"><label>人数</label><input class="form-control" type="number" id="f_ap" value="1" min="1"></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="svA()">提交</button></div>')}
+function svA(){var ap=document.getElementById('f_aa').value.trim(),dp=document.getElementById('f_ad').value,rs=document.getElementById('f_ar').value.trim(),st=document.getElementById('f_ast').value,et=document.getElementById('f_aet').value,ds=document.getElementById('f_ads').value.trim();if(!ap||!rs||!st||!et||!ds){toast('请填写必填项','error');return}var o={id:gid('A'),ap:ap,dp:dp,rs:rs,st:st,et:et,ds:ds,ps:+document.getElementById('f_ap').value||1,vt:document.getElementById('f_vt').value,di:'',currentStep:1,status:'待部门审批',approvalLog:[]};var a=ld(DB.a);a.push(o);sd(DB.a,a);closeModal();rA();toast('已提交，等待部门负责人审批')}
+function viA(id){var a=ld(DB.a).find(function(x){return x.id===id});var sl=gFlow.find(function(f){return f.step===a.currentStep});var logH=(a.approvalLog||[]).map(function(l){return '<div style="padding:6px 0;border-bottom:1px solid var(--fs-gray-1);font-size:13px"><strong>第'+l.step+'步</strong> '+ (l.action==='approved'?'✅ 批准':'❌ 驳回') +' — '+l.by+' '+l.time+ (l.comment?' 备注:'+l.comment:'') +'</div>'}).join('');showModal('<div class="modal-header"><h3>申请详情 '+a.id+'</h3></div><div class="modal-body"><div class="detail-grid"><div class="detail-item"><div class="dl">申请人</div><div class="dv">'+a.ap+'</div></div><div class="detail-item"><div class="dl">部门</div><div class="dv">'+a.dp+'</div></div><div class="detail-item"><div class="dl">事由</div><div class="dv">'+a.rs+'</div></div><div class="detail-item"><div class="dl">当前步骤</div><div class="dv">'+ (sl?sl.name:a.status) +'</div></div><div class="detail-item"><div class="dl">状态</div><div class="dv">'+st2(a.status)+'</div></div><div class="detail-item"><div class="dl">目的地</div><div class="dv">'+a.ds+'</div></div></div>'+ (logH?'<div style="margin-top:16px"><div style="font-size:13px;font-weight:600;margin-bottom:8px">审批记录</div>'+logH+'</div>':'') +'</div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>')}
+
+// ========== 多层审批 ==========
+function rAp(){var a=ld(DB.a);renderFlowVis('apFlowVis');var f=document.getElementById('apf').value;var fl;if(f==='my'){fl=a.filter(function(x){var step=gFlow.find(function(s){return s.step===x.currentStep});return step&&canApproveStep(step.role_code)&&(x.status==='待部门审批'||x.status==='待行政审批')})}else if(f){fl=a.filter(function(x){return x.status===f})}else{fl=a.filter(function(x){return x.status==='待部门审批'||x.status==='待行政审批'||x.status==='已批准'||x.status==='已驳回'})}
+  document.getElementById('tb5').innerHTML=fl.map(function(x){var step=gFlow.find(function(s){return s.step===x.currentStep});var sl=step?step.name:'-';var canAp=step&&canApproveStep(step.role_code);return '<tr><td><strong>'+x.id+'</strong></td><td>'+x.ap+'</td><td>'+x.dp+'</td><td>'+x.rs+'</td><td>'+sl+'</td><td>'+st2(x.status)+'</td><td>'+ (canAp&&x.status.indexOf('待')>=0?'<button class="btn btn-success btn-sm" onclick="doApprove(\''+x.id+'\')">批准</button><button class="btn btn-danger btn-sm" onclick="doReject(\''+x.id+'\')">驳回</button>':'<button class="btn btn-text btn-sm" onclick="viA(\''+x.id+'\')">查看</button>') +'</td></tr>'}).join('')}
+function doApprove(id){var a=ld(DB.a),i=a.findIndex(function(x){return x.id===id});var app=a[i];var ns=app.currentStep+1;var isLast=ns>gFlow.length;app.approvalLog.push({step:app.currentStep,action:'approved',by:curUser.name,time:new Date().toLocaleString(),comment:''});if(isLast){app.status='已批准';app.currentStep=gFlow.length}else{var nf=gFlow.find(function(f){return f.step===ns});app.status=ns===2?'待行政审批':'待'+ (nf?nf.name:'审批');app.currentStep=ns}sd(DB.a,a);rAp();toast(isLast?'审批完成':'已批准，进入下一步：'+ (gFlow.find(function(f){return f.step===ns})?gFlow.find(function(f){return f.step===ns}).name:''))}
+function doReject(id){showModal('<div class="modal-header"><h3>驳回申请</h3></div><div class="modal-body"><div class="form-group"><label>驳回原因</label><textarea class="form-control" id="f_rj"></textarea></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-danger" onclick="confirmReject(\''+id+'\')">确认驳回</button></div>')}
+function confirmReject(id){var a=ld(DB.a),i=a.findIndex(function(x){return x.id===id});a[i].approvalLog.push({step:a[i].currentStep,action:'rejected',by:curUser.name,time:new Date().toLocaleString(),comment:document.getElementById('f_rj').value});a[i].status='已驳回';sd(DB.a,a);closeModal();rAp();toast('已驳回')}
+
+// ========== 车辆调派 ==========
+function rDis(){var a=ld(DB.a),v=ld(DB.v),d=ld(DB.d);var pa=a.filter(function(x){return x.status==='已批准'});document.getElementById('d1').textContent=pa.length;document.getElementById('d2').textContent=v.filter(function(x){return x.st==='可用'}).length;document.getElementById('d3').textContent=d.filter(function(x){return x.status==='进行中'}).length;document.getElementById('d4').textContent=d.filter(function(x){return x.status==='已完成'}).length;var cd=curUser.permissions.indexOf('all')>=0||curUser.permissions.indexOf('dispatch')>=0;document.getElementById('tb6').innerHTML=pa.map(function(x){return '<tr><td><strong>'+x.id+'</strong></td><td>'+x.ap+'</td><td>'+x.rs+'</td><td>'+x.st+'</td><td>'+x.ps+'人</td><td>'+ (cd?'<button class="btn btn-primary btn-sm" onclick="sDis(\''+x.id+'\')">调派</button>':'<span style="color:var(--fs-gray-4);font-size:12px">等待管理员</span>') +'</td></tr>'}).join('');if(!pa.length)document.getElementById('tb6').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--fs-gray-4)">暂无</td></tr>';document.getElementById('tb7').innerHTML=d.map(function(x){return '<tr><td><strong>'+x.ai+'</strong></td><td>'+x.ap+'</td><td><strong>'+x.pn+'</strong></td><td>'+x.dr+'</td><td>'+x.st+'</td><td>'+st2(x.status)+'</td><td>'+ (x.status==='进行中'&&cd?'<button class="btn btn-success btn-sm" onclick="cDis(\''+x.id+'\')">完成</button>':'') +'<button class="btn btn-text btn-sm" onclick="viDis(\''+x.id+'\')">查看</button></td></tr>'}).join('');if(!d.length)document.getElementById('tb7').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--fs-gray-4)">暂无</td></tr>'}
+function sDis(appId){var app=ld(DB.a).find(function(x){return x.id===appId});var avail=ld(DB.v).filter(function(v){return v.st==='可用'});var opts=avail.map(function(v){return '<option value="'+v.id+'" data-p="'+v.pn+'" data-d="'+v.dr+'">'+v.pn+'-'+v.br+v.md+'('+v.sc+'座)</option>'}).join('');showModal('<div class="modal-header"><h3>调派车辆</h3></div><div class="modal-body"><div style="padding:10px 14px;background:var(--fs-gray-1);border-radius:8px;margin-bottom:14px;font-size:13px"><strong>'+app.ap+'</strong>·'+app.rs+'·'+app.ds+'·'+app.ps+'人</div><div class="form-group"><label>选择车辆</label><select class="form-control" id="f_dv"><option value="">请选择</option>'+opts+'</select></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="confDis(\''+appId+'\')">确认</button></div>')}
+function confDis(appId){var vid=document.getElementById('f_dv').value;if(!vid){toast('请选择车辆','error');return}var sel=document.getElementById('f_dv'),pn=sel.options[sel.selectedIndex].dataset.p,dr=sel.options[sel.selectedIndex].dataset.d;var app=ld(DB.a).find(function(x){return x.id===appId});var o={id:gid('D'),ai:appId,ap:app.ap,vid:vid,pn:pn,dr:dr||'未指定',status:'进行中'};var ds=ld(DB.d);ds.push(o);sd(DB.d,ds);var as=ld(DB.a),ai=as.findIndex(function(x){return x.id===appId});as[ai].status='已调派';as[ai].di=o.id;sd(DB.a,as);var vs=ld(DB.v),vi=vs.findIndex(function(x){return x.id===vid});vs[vi].st='使用中';sd(DB.v,vs);closeModal();rDis();toast('已调派'+pn)}
+function cDis(id){var ds=ld(DB.d),i=ds.findIndex(function(x){return x.id===id});ds[i].status='已完成';sd(DB.d,ds);var vs=ld(DB.v),vi=vs.findIndex(function(x){return x.id===ds[i].vid});vs[vi].st='可用';sd(DB.v,vs);var as=ld(DB.a),ai=as.findIndex(function(x){return x.id===ds[i].ai});as[ai].status='已完成';sd(DB.a,as);rDis();toast('已完成')}
+function viDis(id){var d=ld(DB.d).find(function(x){return x.id===id});showModal('<div class="modal-header"><h3>调派详情</h3></div><div class="modal-body"><div class="detail-grid"><div class="detail-item"><div class="dl">申请人</div><div class="dv">'+d.ap+'</div></div><div class="detail-item"><div class="dl">车辆</div><div class="dv">'+d.pn+'</div></div><div class="detail-item"><div class="dl">驾驶员</div><div class="dv">'+d.dr+'</div></div><div class="detail-item"><div class="dl">状态</div><div class="dv">'+st2(d.status)+'</div></div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">关闭</button></div>')}
+
+// ========== 角色管理 ==========
+function rRoles(){var isAdm=curUser.permissions.indexOf('all')>=0;if(!isAdm){document.getElementById('tb_roles').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--fs-red)">仅系统管理员可管理角色</td></tr>';return}document.getElementById('tb_roles').innerHTML=gRoles.map(function(r){return '<tr><td><strong>'+r.name+'</strong></td><td>'+r.code+'</td><td>'+r.desc+'</td><td>'+getPermLabels(r.permissions)+'</td><td>'+ (r.code==='admin'?'<span style="color:var(--fs-gray-4);font-size:12px">不可删除</span>':'<button class="btn btn-text btn-sm" onclick="eRole(\''+r.id+'\')">编辑</button><button class="btn btn-text btn-sm" style="color:var(--fs-red)" onclick="dRole(\''+r.id+'\')">删除</button>') +'</td></tr>'}).join('')}
+function sRM(){var permH=ALL_PERMS.map(function(p){return '<div class="perm-item" data-code="'+p.code+'" onclick="togglePerm(this)"><div class="perm-ck">✓</div>'+p.label+'</div>'}).join('');showModal('<div class="modal-header"><h3>新增角色</h3></div><div class="modal-body"><div class="form-row"><div class="form-group"><label>角色名称<span class="req">*</span></label><input class="form-control" id="f_rn"></div><div class="form-group"><label>角色编码<span class="req">*</span></label><input class="form-control" id="f_rc"><div class="form-hint">如：dept_head, supervisor</div></div></div><div class="form-group"><label>描述</label><textarea class="form-control" id="f_rd"></textarea></div><div class="form-group"><label>权限</label><div class="perm-grid" id="permGrid">'+permH+'</div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="svRole()">保存</button></div>')}
+function togglePerm(el){el.classList.toggle('selected')}
+function getSelectedPerms(){return Array.from(document.querySelectorAll('.perm-item.selected')).map(function(el){return el.dataset.code})}
+function svRole(){var name=document.getElementById('f_rn').value.trim(),code=document.getElementById('f_rc').value.trim();if(!name||!code){toast('必填','error');return}if(gRoles.find(function(r){return r.code===code})){toast('编码已存在','error');return}var perms=getSelectedPerms();var newR={id:'R'+ (gRoles.length+1).toString().padStart(3,'0'),name:name,code:code,desc:document.getElementById('f_rd').value.trim(),permissions:perms};gRoles.push(newR);closeModal();rRoles();toast('角色已创建')}
+function eRole(id){var r=gRoles.find(function(x){return x.id===id});var permH=ALL_PERMS.map(function(p){return '<div class="perm-item'+ (r.permissions.indexOf(p.code)>=0||r.permissions.indexOf('all')>=0&&p.code!=='all'?' selected':'') +'" data-code="'+p.code+'" onclick="togglePerm(this)"><div class="perm-ck">✓</div>'+p.label+'</div>'}).join('');showModal('<div class="modal-header"><h3>编辑角色</h3></div><div class="modal-body"><div class="form-row"><div class="form-group"><label>角色名称</label><input class="form-control" id="f_rn" value="'+r.name+'"></div><div class="form-group"><label>角色编码</label><input class="form-control" id="f_rc" value="'+r.code+'"'+ (r.code==='admin'?' readonly':'') +'></div></div><div class="form-group"><label>描述</label><textarea class="form-control" id="f_rd">'+r.desc+'</textarea></div><div class="form-group"><label>权限</label><div class="perm-grid" id="permGrid">'+permH+'</div></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="upRole(\''+id+'\')">保存</button></div>')}
+function upRole(id){var r=gRoles.find(function(x){return x.id===id});r.name=document.getElementById('f_rn').value.trim();r.desc=document.getElementById('f_rd').value.trim();r.permissions=getSelectedPerms();if(r.code!=='admin')r.code=document.getElementById('f_rc').value.trim();closeModal();rRoles();toast('角色已更新')}
+function dRole(id){var r=gRoles.find(function(x){return x.id===id});if(r.code==='admin'){toast('管理员角色不可删除','error');return}showModal('<div class="modal-header"><h3>删除角色</h3></div><div class="modal-body"><p>删除角色"'+r.name+'"？</p></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-danger" onclick="rmRole(\''+id+'\')">确认</button></div>')}
+function rmRole(id){gRoles=gRoles.filter(function(x){return x.id!==id});closeModal();rRoles();toast('角色已删除')}
+
+// ========== 用户管理 ==========
+function rUsers(){var isAdm=curUser.permissions.indexOf('all')>=0;if(!isAdm){document.getElementById('tb_users').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--fs-red)">仅系统管理员可管理用户</td></tr>';return}var users=gUsers;document.getElementById('tb_users').innerHTML=users.map(function(u){var role=gRoles.find(function(r){return r.code===u.role_code});return '<tr><td><strong>'+u.name+'</strong></td><td>'+ (u.dept_name||u.dept||'-') +'</td><td>'+ (u.mobile||'-') +'</td><td>'+getRoleName(u.role_code)+'</td><td><button class="btn btn-text btn-sm" onclick="changeUserRole(\''+u.id+'\')">变更角色</button></td></tr>'}).join('');if(!users.length)document.getElementById('tb_users').innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--fs-gray-4)">暂无飞书登录用户，请通过飞书登录后自动添加</td></tr>'}
+function changeUserRole(userId){var u=gUsers.find(function(x){return x.id===userId});var opts=gRoles.map(function(r){return '<option value="'+r.code+'"'+ (r.code===u.role_code?' selected':'') +'>'+r.name+' ('+r.code+')</option>'}).join('');showModal('<div class="modal-header"><h3>变更用户角色</h3></div><div class="modal-body"><div style="padding:10px 14px;background:var(--fs-gray-1);border-radius:8px;margin-bottom:14px;font-size:13px"><strong>'+u.name+'</strong> · '+ (u.dept_name||u.dept||'未知部门') +' · 当前角色：'+getRoleName(u.role_code)+'</div><div class="form-group"><label>选择新角色</label><select class="form-control" id="f_ur">'+opts+'</select></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="saveUserRole(\''+userId+'\')">确认</button></div>')}
+function saveUserRole(userId){var newCode=document.getElementById('f_ur').value;var u=gUsers.find(function(x){return x.id===userId});u.role_code=newCode;closeModal();rUsers();toast('已将'+u.name+'角色变更为'+getRoleName(newCode))}
+
+// ========== 审批流程配置 ==========
+function rFC(){var isAdm=curUser.permissions.indexOf('all')>=0;if(!isAdm){document.getElementById('flowConfigVis').innerHTML='<div style="color:var(--fs-red);text-align:center;padding:20px">仅系统管理员可配置</div>';document.getElementById('tb_flow').innerHTML='';return}
+  var fH='';gFlow.forEach(function(f,i){fH+='<div class="flow-step">第'+f.step+'步: '+f.name+'<br><small style="opacity:.8">'+getRoleName(f.role_code)+'</small></div>';if(i<gFlow.length-1)fH+='<div class="flow-arrow">→</div>'});fH+='<div class="flow-step last" style="background:var(--fs-green)">完成派车</div>';document.getElementById('flowConfigVis').innerHTML=fH;
+  document.getElementById('tb_flow').innerHTML=gFlow.map(function(f){return '<tr><td><strong>第'+f.step+'步</strong></td><td>'+f.name+'</td><td>'+getRoleName(f.role_code)+'</td><td>'+f.desc+'</td><td><button class="btn btn-text btn-sm" onclick="eFlowStep('+f.step+')">编辑</button><button class="btn btn-text btn-sm" style="color:var(--fs-red)" onclick="rmFlowStep('+f.step+')">删除</button></td></tr>'}).join('')}
+function sAFS(){var opts=gRoles.map(function(r){return '<option value="'+r.code+'">'+r.name+'</option>'}).join('');showModal('<div class="modal-header"><h3>新增审批步骤</h3></div><div class="modal-body"><div class="form-group"><label>步骤名称<span class="req">*</span></label><input class="form-control" id="f_fsn"></div><div class="form-group"><label>审批角色<span class="req">*</span></label><select class="form-control" id="f_fsr">'+opts+'</select></div><div class="form-group"><label>描述</label><textarea class="form-control" id="f_fsd"></textarea></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="addFlowStep()">添加</button></div>')}
+function addFlowStep(){var name=document.getElementById('f_fsn').value.trim(),role_code=document.getElementById('f_fsr').value,desc=document.getElementById('f_fsd').value.trim();if(!name){toast('必填','error');return}var ns={step:gFlow.length+1,name:name,role_code:role_code,desc:desc};gFlow.push(ns);closeModal();rFC();toast('步骤已添加')}
+function eFlowStep(stepNum){var f=gFlow.find(function(x){return x.step===stepNum});var opts=gRoles.map(function(r){return '<option value="'+r.code+'"'+ (r.code===f.role_code?' selected':'') +'>'+r.name+'</option>'}).join('');showModal('<div class="modal-header"><h3>编辑审批步骤</h3></div><div class="modal-body"><div class="form-group"><label>步骤名称</label><input class="form-control" id="f_fsn" value="'+f.name+'"></div><div class="form-group"><label>审批角色</label><select class="form-control" id="f_fsr">'+opts+'</select></div><div class="form-group"><label>描述</label><textarea class="form-control" id="f_fsd">'+f.desc+'</textarea></div></div><div class="modal-footer"><button class="btn btn-outline" onclick="closeModal()">取消</button><button class="btn btn-primary" onclick="upFlowStep('+stepNum+')">保存</button></div>')}
+function upFlowStep(stepNum){var f=gFlow.find(function(x){return x.step===stepNum});f.name=document.getElementById('f_fsn').value.trim();f.role_code=document.getElementById('f_fsr').value;f.desc=document.getElementById('f_fsd').value.trim();closeModal();rFC();toast('步骤已更新')}
+function rmFlowStep(stepNum){gFlow=gFlow.filter(function(x){return x.step!==stepNum});gFlow.forEach(function(f,i){f.step=i+1});rFC();toast('步骤已删除')}
+
+checkEnv();
+</script>
+</body>
+</html>
